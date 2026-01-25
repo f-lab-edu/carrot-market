@@ -27,9 +27,10 @@ public class TokenBlacklistService {
         );
     }
 
-    public boolean isTokenBlacklisted(String token) {
+    public boolean isTokenBlacklisted(String userId, String token) {
         return Boolean.TRUE.equals(
-                redisTemplate.hasKey(BLACKLIST_PREFIX + token)
+                redisTemplate.opsForSet()
+                        .isMember(BLACKLIST_PREFIX + userId, token)
         );
     }
 
