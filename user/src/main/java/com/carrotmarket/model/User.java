@@ -1,7 +1,9 @@
 package com.carrotmarket.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
         @Index(name = "idx_users_nickname", columnList = "nickname")
 })
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id

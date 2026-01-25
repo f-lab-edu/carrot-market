@@ -1,4 +1,4 @@
-package com.carrotmarket.controller.dto;
+package com.carrotmarket.controller.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
