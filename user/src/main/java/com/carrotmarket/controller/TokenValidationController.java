@@ -5,12 +5,13 @@ import com.carrotmarket.controller.dto.response.TokenValidationResponse;
 import com.carrotmarket.service.JwtTokenProvider;
 import com.carrotmarket.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/token")
 @RestController
@@ -20,7 +21,10 @@ public class TokenValidationController {
     private final TokenBlacklistService tokenBlacklistService;
 
     @PostMapping("/validate")
-    public ResponseEntity<TokenValidationResponse> validateToken(@RequestBody TokenValidationRequest request) {
+    public ResponseEntity<TokenValidationResponse> validateToken(
+            @RequestHeader HttpHeaders headers,
+            @RequestBody @Validated TokenValidationRequest request
+    ) {
         try {
             String accessToken = request.token();
 
@@ -37,7 +41,9 @@ public class TokenValidationController {
 
             return ResponseEntity.ok(new TokenValidationResponse(true, userId, null));
         } catch (Exception e) {
-            return ResponseEntity.ok(new TokenValidationResponse(false, null, "토큰 검증 실패: " + e.getMessage()));
+            headers.getFirst(HttpHeaders.AUTHORIZATION);
+            log.error("[ERROR] TID: {} | message : {}", headers.get("TID"), e.getMessage());
+            return ResponseEntity.ok(new TokenValidationResponse(false, null, "토큰 검증 중 오류가 발생했습니다."));
         }
     }
 

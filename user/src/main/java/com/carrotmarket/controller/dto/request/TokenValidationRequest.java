@@ -1,5 +1,7 @@
 package com.carrotmarket.controller.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record TokenValidationRequest(
-        String token
+        @NotBlank String token
 ) {}
