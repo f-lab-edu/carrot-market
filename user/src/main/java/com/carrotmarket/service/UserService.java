@@ -56,6 +56,7 @@ public class UserService {
     public void logout(String accessToken) {
         String userId = jwtTokenProvider.getUserIdFromAccessToken(accessToken);
         tokenBlacklistService.blacklistToken(userId, accessToken, jwtTokenProvider.getAccessTokenExpirationMs());
+        refreshTokenService.delete(userId);
     }
 
     public LoginResponseDto refreshToken(String refreshToken) {
