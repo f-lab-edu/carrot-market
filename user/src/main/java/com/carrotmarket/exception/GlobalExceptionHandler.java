@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
             IllegalArgumentException e,
             HttpServletRequest request
     ) {
-        log.error("[ERROR] TID: {} | Exception: {}", request.getHeader("TID"), e.getMessage(), e);
+        log.error("[ERROR] TID: {} | Exception: {}", request.getHeader("TID"), e.getMessage());
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
             RuntimeException e,
             HttpServletRequest request
     ) {
-        log.error("[ERROR] TID: {} | Exception: {}", request.getHeader("TID"), e.getMessage(), e);
+        log.error("[ERROR] TID: {} | Exception: {}", request.getHeader("TID"), e.getMessage());
 
         ErrorResponse response = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

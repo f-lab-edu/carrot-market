@@ -25,26 +25,20 @@ public class TokenValidationController {
             @RequestHeader HttpHeaders headers,
             @RequestBody @Validated TokenValidationRequest request
     ) {
-        try {
-            String accessToken = request.token();
+        String accessToken = request.token();
 
-            if (!jwtTokenProvider.validateAccessToken(accessToken)) {
-                return ResponseEntity.ok(new TokenValidationResponse(false, null, "유효하지 않은 토큰입니다."));
-            }
-
-            String userId = jwtTokenProvider.getUserIdFromAccessToken(accessToken);
-            boolean isBlacklisted = tokenBlacklistService.isTokenBlacklisted(userId, accessToken);
-
-            if (isBlacklisted) {
-                return ResponseEntity.ok(new TokenValidationResponse(false, userId, "블랙리스트된 토큰입니다."));
-            }
-
-            return ResponseEntity.ok(new TokenValidationResponse(true, userId, null));
-        } catch (Exception e) {
-            headers.getFirst(HttpHeaders.AUTHORIZATION);
-            log.error("[ERROR] TID: {} | message : {}", headers.get("TID"), e.getMessage());
-            return ResponseEntity.ok(new TokenValidationResponse(false, null, "토큰 검증 중 오류가 발생했습니다."));
+        if (!jwtTokenProvider.validateAccessToken(accessToken)) {
+            return ResponseEntity.ok(new TokenValidationResponse(false, null, "유효하지 않은 토큰입니다."));
         }
+
+        String userId = jwtTokenProvider.getUserIdFromAccessToken(accessToken);
+        boolean isBlacklisted = tokenBlacklistService.isTokenBlacklisted(userId, accessToken);
+
+        if (isBlacklisted) {
+            return ResponseEntity.ok(new TokenValidationResponse(false, userId, "블랙리스트된 토큰입니다."));
+        }
+
+        return ResponseEntity.ok(new TokenValidationResponse(true, userId, null));
     }
 
 }
