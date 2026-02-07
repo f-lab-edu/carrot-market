@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3305/test_schema?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: 1234
+    password: 1234 # 추후 암호화 된 환경변수로 관리 필요
 
   jpa:
     hibernate:
@@ -20,12 +20,6 @@ spring:
       port: 6379
       timeout: 60000ms
 
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql: trace
-
-
 jwt:
   accessToken:
     secret: access-abcdefghijklmnopqrstuvwxyzABCDEF1234567890 # 추후 암호화 된 환경변수로 관리 필요
@@ -33,6 +27,7 @@ jwt:
   refreshToken:
     secret: refresh-abcdefghijklmnopqrstuvwxyzABCDEF1234567890 # 추후 암호화 된 환경변수로 관리 필요
     expirationMs: 604800000
+
 
 server:
   port: 8001
