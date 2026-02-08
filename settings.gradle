@@ -1,3 +1,4 @@
 rootProject.name = 'carrot-market'
 include 'user'
 include 'test'
+include 'Product'
