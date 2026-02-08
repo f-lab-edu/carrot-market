@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3305/test_schema?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234 # 추후 암호화 된 환경변수로 관리 필요
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # create | create-drop | update | validate | none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+server:
+  port: 8002
