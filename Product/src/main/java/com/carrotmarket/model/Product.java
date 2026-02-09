@@ -44,6 +44,10 @@ public class Product {
     private String preferredLocation;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status = ProductStatus.ON_SALE;
+
+    @Column(nullable = false)
     private Long chatCount = 0L;
 
     @Column(nullable = false)
@@ -99,6 +103,11 @@ public class Product {
         if (productUpdateVO.getPreferredLocation() != null) {
             this.preferredLocation = productUpdateVO.getPreferredLocation();
         }
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void changeStatus(ProductStatus newStatus) {
+        this.status = newStatus;
         this.updatedAt = LocalDateTime.now();
     }
 

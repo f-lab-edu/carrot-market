@@ -49,4 +49,12 @@ public class ProductController {
                 .ok(new ProductResponseDto(product));
     }
 
+    @PostMapping("/{productId}/status")
+    public ResponseEntity<Void> changeProductStatus(@PathVariable Long productId, @RequestParam int statusCode) {
+        productService.changeProductStatus(productId, statusCode);
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
+
 }
