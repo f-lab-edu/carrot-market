@@ -4,6 +4,7 @@ import com.carrotmarket.controller.dto.request.CreatedProductRequestDto;
 import com.carrotmarket.controller.dto.request.ProductResponseDto;
 import com.carrotmarket.controller.dto.request.UpdateProductRequestDto;
 import com.carrotmarket.model.Product;
+import com.carrotmarket.model.ProductStatus;
 import com.carrotmarket.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class ProductController {
 
     @PostMapping("/{productId}/status")
     public ResponseEntity<Void> changeProductStatus(@PathVariable Long productId, @RequestParam int statusCode) {
-        productService.changeProductStatus(productId, statusCode);
+        productService.changeProductStatus(productId, ProductStatus.getByOrdinary(statusCode));
         return ResponseEntity
                 .noContent()
                 .build();

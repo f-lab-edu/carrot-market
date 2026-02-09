@@ -17,9 +17,13 @@ import static com.carrotmarket.exception.ExceptionCode.PRODUCT_NOT_FOUND;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final KafkaService kafkaService;
 
     public Product createProduct(Product product) {
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+
+        kafkaService.publishProductCreatedEvent(savedProduct);
+        return savedProduct;
     }
 
     public Product updateProduct(Long productId, ProductUpdateVO productUpdateVO) {
@@ -28,6 +32,7 @@ public class ProductService {
 
         findProduct.update(productUpdateVO);
 
+        kafkaService.publishProductUpdatedEvent(findProduct, productUpdateVO);
         return findProduct;
     }
 
@@ -36,6 +41,8 @@ public class ProductService {
                 .orElseThrow(() -> new CustomException(PRODUCT_NOT_FOUND));
 
         product.delete();
+
+        kafkaService.publishProductDeletedEvent(product);
     }
 
     @Transactional(readOnly = true)
@@ -44,12 +51,18 @@ public class ProductService {
                 .orElseThrow(() -> new CustomException(PRODUCT_NOT_FOUND));
     }
 
-    public void changeProductStatus(Long productId, int productStatusOrdinary) {
+    public void changeProductStatus(Long productId, ProductStatus newStatus) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new CustomException(PRODUCT_NOT_FOUND));
 
-        ProductStatus newStatus = ProductStatus.getByOrdinary(productStatusOrdinary);
+        ProductStatus oldStatus = product.getStatus();
         product.changeStatus(newStatus);
+
+        kafkaService.publishProductStatusChangedEvent(
+                product.getId(),
+                oldStatus,
+                newStatus
+        );
     }
 
 }
