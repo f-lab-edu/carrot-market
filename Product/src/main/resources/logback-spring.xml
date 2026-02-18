@@ -16,4 +16,8 @@
     <logger name="com.carrotmarket" level="INFO"/>
     <logger name="org.hibernate.SQL" level="DEBUG"/>
     <logger name="org.hibernate.type.descriptor.sql" level="DEBUG"/>
+
+    <!-- Kafka 설정 로그 숨기기 -->
+    <logger name="org.apache.kafka.common.config.AbstractConfig" level="WARN"/>
+    <logger name="org.apache.kafka.clients.producer.ProducerConfig" level="WARN"/>
 </configuration>
