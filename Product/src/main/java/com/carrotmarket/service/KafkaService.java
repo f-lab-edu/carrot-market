@@ -8,9 +8,11 @@ import com.carrotmarket.model.kafka.ProductDeletedEvent;
 import com.carrotmarket.model.kafka.ProductStatusChangedEvent;
 import com.carrotmarket.model.kafka.ProductUpdatedEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class KafkaService {
@@ -27,22 +29,54 @@ public class KafkaService {
 
     public void publishProductCreatedEvent(Product product) {
         ProductCreatedEvent event = new ProductCreatedEvent(product);
-        productCreatedKafkaTemplate.send(PRODUCT_CREATED_TOPIC, product.getId().toString(), event);
+        log.info("Sending ProductCreatedEvent to topic [{}] - {}", PRODUCT_CREATED_TOPIC, event);
+        productCreatedKafkaTemplate.send(PRODUCT_CREATED_TOPIC, product.getId().toString(), event)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("✓ ProductCreatedEvent sent successfully to topic [{}]", PRODUCT_CREATED_TOPIC);
+                } else {
+                    log.error("✗ ProductCreatedEvent failed to topic [{}]", PRODUCT_CREATED_TOPIC, ex);
+                }
+            });
     }
 
     public void publishProductUpdatedEvent(Product product, ProductUpdateVO updateVO) {
         ProductUpdatedEvent event = new ProductUpdatedEvent(product, updateVO);
-        productUpdatedKafkaTemplate.send(PRODUCT_UPDATED_TOPIC, product.getId().toString(), event);
+        log.info("Sending ProductUpdatedEvent to topic [{}] - {}", PRODUCT_UPDATED_TOPIC, event);
+        productUpdatedKafkaTemplate.send(PRODUCT_UPDATED_TOPIC, product.getId().toString(), event)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("✓ ProductUpdatedEvent sent successfully to topic [{}]", PRODUCT_UPDATED_TOPIC);
+                } else {
+                    log.error("✗ ProductUpdatedEvent failed to topic [{}]", PRODUCT_UPDATED_TOPIC, ex);
+                }
+            });
     }
 
     public void publishProductDeletedEvent(Product product) {
         ProductDeletedEvent event = new ProductDeletedEvent(product);
-        productDeletedKafkaTemplate.send(PRODUCT_DELETED_TOPIC, product.getId().toString(), event);
+        log.info("Sending ProductDeletedEvent to topic [{}] - {}", PRODUCT_DELETED_TOPIC, event);
+        productDeletedKafkaTemplate.send(PRODUCT_DELETED_TOPIC, product.getId().toString(), event)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("✓ ProductDeletedEvent sent successfully to topic [{}]", PRODUCT_DELETED_TOPIC);
+                } else {
+                    log.error("✗ ProductDeletedEvent failed to topic [{}]", PRODUCT_DELETED_TOPIC, ex);
+                }
+            });
     }
 
     public void publishProductStatusChangedEvent(Long productId, ProductStatus oldStatus, ProductStatus newStatus) {
         ProductStatusChangedEvent event = new ProductStatusChangedEvent(productId, oldStatus, newStatus);
-        productStatusKafkaTemplate.send(PRODUCT_STATUS_TOPIC, productId.toString(), event);
+        log.info("Sending ProductStatusChangedEvent to topic [{}] - {}", PRODUCT_STATUS_TOPIC, event);
+        productStatusKafkaTemplate.send(PRODUCT_STATUS_TOPIC, productId.toString(), event)
+            .whenComplete((result, ex) -> {
+                if (ex == null) {
+                    log.info("✓ ProductStatusChangedEvent sent successfully to topic [{}]", PRODUCT_STATUS_TOPIC);
+                } else {
+                    log.error("✗ ProductStatusChangedEvent failed to topic [{}]", PRODUCT_STATUS_TOPIC, ex);
+                }
+            });
     }
 
 }

@@ -5,17 +5,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCreatedEvent {
 
     @JsonProperty("product_id")
-    private Long id;
+    private Long productId;
 
     @JsonProperty("user_id")
     private Long userId;
@@ -63,7 +65,7 @@ public class ProductCreatedEvent {
     private LocalDateTime updatedAt;
 
     public ProductCreatedEvent(Product product) {
-        this.id = product.getId();
+        this.productId = product.getId();
         this.userId = product.getUserId();
         this.productName = product.getProductName();
         this.price = product.getPrice();
